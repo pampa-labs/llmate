@@ -1,3 +1,3 @@
 # LLMate
 
-Enjoy brewing your LLM🧉
+Enjoy brewing your LLM-SQL solution🧉
