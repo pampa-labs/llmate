@@ -18,7 +18,6 @@ def update_model():
     
 st.header("LLMate 🧉")
 
-#TODO mejorar description
 st.markdown(
     """
     This application is designed for customizing and evaluating an LLM-to-SQL solution. 

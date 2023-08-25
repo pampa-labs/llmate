@@ -10,8 +10,6 @@ if st.session_state['openai_api_key'] != '':
     st.info("To recreate this Agent in your solution, copy and paste the code below:")
 
 
-    #TODO Meter bien el model
-    #TODO Custom table info es siempre un choclazo
 
     # First we define the logic to see wether we need to specify params or not:
     changing_tables = (st.session_state['include_tables'] != st.session_state['table_names'])
