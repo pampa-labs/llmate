@@ -1,13 +1,21 @@
 import streamlit as st
 import os
-from PIL import Image
+from langchain.utilities import SQLDatabase
 import tempfile
+from langchain.chat_models import ChatOpenAI
 
 import llmate_config
 
 llmate_config.general_config()
 llmate_config.init_session_state()
 
+
+def update_model():
+    st.session_state['openai_model'] = st.session_state['model_selection']
+    st.session_state['llm'] = ChatOpenAI(temperature=0, verbose=True, model=st.session_state['openai_model'])
+    
+    st.toast(f"Updated model to {st.session_state['model_selection']}")
+    
 st.header("LLMate 🧉")
 
 #TODO mejorar description
@@ -34,11 +42,13 @@ with c1:
                                                     type='password',
                                                     value=st.session_state['openai_api_key'])
 with c2:
-    #TODO no lo uso nunca por ahora, porque rompe ChatOpenAI vs OpenAI
-    st.session_state['openai_model'] = model = st.radio("`OpenAI model`",
-                                                        ("gpt-3.5-turbo",
-                                                         "gpt-4"),
-                                                         index=0)
+    st.session_state['openai_model_selection'] = st.radio("`OpenAI model`",
+                                                          ("gpt-3.5-turbo", "gpt-4"),
+                                                          index=("gpt-3.5-turbo", "gpt-4").index(st.session_state['openai_model']),
+                                                          on_change=update_model,
+                                                          key='model_selection'
+                                                          )
+                                                          
 st.session_state['openai_api_key'] = st.session_state['api_key_input']
 os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']
 
@@ -61,6 +71,10 @@ if db is not None:
     tfile.write(st.session_state['uploaded_db'].read())
     tfile.close()
     st.session_state['db_path'] = tfile.name
+    st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'])
+    st.session_state['sample_rows_in_table_info'] = 2
+    st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
+    st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
 
 
 if st.session_state['uploaded_db'] is not None:

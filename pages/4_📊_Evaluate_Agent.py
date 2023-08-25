@@ -1,7 +1,4 @@
 import json
-import os
-
-import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -105,9 +102,3 @@ if st.button("Evaluate Agent"):
     summary.index.name = 'Exp Number'   
     st.dataframe(data=summary, use_container_width=True)
     st.session_state.existing_df = summary
-
-    # Dataframe for visualization
-    # show = summary.reset_index().copy()
-    # print(show.columns)
-    # show.columns = ['Exp number', 'Latency','Answer score', 'Tokens']
-    # show['Exp number'] = show['Exp number'].apply(lambda x: "E"+str(x + 1) +'-'+st.session_state['db_name']+'-'+st.session_state['eval_set_name'])

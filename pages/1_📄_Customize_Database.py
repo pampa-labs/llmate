@@ -1,9 +1,6 @@
 import streamlit as st
-
 from langchain.utilities import SQLDatabase
-from langchain.llms import OpenAI
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
-from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX
 
 import llmate_config
 llmate_config.general_config()
@@ -16,7 +13,6 @@ if 'custom_table_info' not in st.session_state:
 
         for i in range(len(tables_createtable_statement)):
             custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
-         
         st.session_state['custom_table_info'] = custom_table_info
 
 
@@ -40,7 +36,6 @@ def update_db_params():
             custom_table_info[st.session_state['include_tables'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
         
         st.session_state['custom_table_info'] = custom_table_info
-        st.toast(f"Updated DB Params", icon="✅")
 
 def update_table_info(table_id):
 
@@ -85,6 +80,7 @@ if st.session_state['openai_api_key'] != '':
                                 on_change=update_db_params,
                                 key='sample_rows'
                                 )
+    update_db_params()
 
 
     if st.session_state['selected_tables']:
