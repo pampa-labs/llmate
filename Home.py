@@ -1,8 +1,10 @@
-import streamlit as st
+import copy
 import os
-from langchain.utilities import SQLDatabase
 import tempfile
+
+import streamlit as st
 from langchain.chat_models import ChatOpenAI
+from langchain.utilities import SQLDatabase
 
 import llmate_config
 
@@ -48,7 +50,7 @@ with c2:
                                                           key='model_selection'
                                                           )
                                                           
-st.session_state['openai_api_key'] = st.session_state['api_key_input']
+st.session_state['openai_api_key'] = copy.deepcopy(st.session_state['api_key_input'])
 os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']
 
 
