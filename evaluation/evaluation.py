@@ -22,7 +22,7 @@ def grade_answer(eval_dataset: List, predictions: List) -> List:
     with st.spinner(text="Grading answers..."):
 
         eval_chain = QAEvalChain.from_llm(
-            llm=st.session_state['openai_model'],
+            llm=st.session_state['llm'],
             prompt=GRADING_PROMPT
         )
 

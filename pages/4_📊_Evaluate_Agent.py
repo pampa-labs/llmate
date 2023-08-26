@@ -68,11 +68,11 @@ if st.button("Evaluate Agent"):
     st.info(
     f"""Evaluation completed. Evaluation costs were as follows:
 
-    * {sum(answer_toks)} tokens getting the answers for each question
+    * {sum(answer_toks)} tokens getting the answers for each question (gpt-turbo-3.5)
 
-    * {sum(target_toks)} tokens dynamically computing the targets for each question
-
-    * {grade_toks} grading the solution
+    * {sum(target_toks)} tokens dynamically computing the targets for each question (text-davinci-003)
+ 
+    * {grade_toks} grading the solution (gpt-turbo-3.5)`
 
     In total, {sum(target_toks) + sum(answer_toks) + grade_toks} tokens were used.
   
