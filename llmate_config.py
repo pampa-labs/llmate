@@ -39,6 +39,7 @@ def init_session_state():
 
     initial_variables = {}
     # -------------------------------From main page------------------------------
+    initial_variables['openai_model'] = 'gpt-turbo-3.5'
     initial_variables['uploaded_db'] = None
     initial_variables['db_path'] = 'example/Example_Chinook.db'
     initial_variables['db_name'] = 'Example_Chinook.db'
@@ -53,7 +54,7 @@ def init_session_state():
     initial_variables['sql_agent_prefix'] = SQL_PREFIX
     initial_variables['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
 
-    if  st.session_state['openai_api_key']:
+    if  st.session_state.get('openai_api_key'):
         # -------------------------------From Customize Database------------------------------
         initial_variables['llm'] = ChatOpenAI(temperature=0, verbose=True, model=initial_variables['openai_model'])
         initial_variables['sql_toolkit'] =  SQLDatabaseToolkit(db=initial_variables['sql_db'],

@@ -35,7 +35,7 @@ st.markdown(
 """
 )
 
-if 'openai_api_key' not in st.session_state:
+if  st.session_state.get('openai_api_key'):
     st.session_state['openai_api_key'] = ''
 
 c1, c2 = st.columns([2,1])
@@ -45,12 +45,12 @@ with c1:
                                                     value=st.session_state['openai_api_key'])
 with c2:
     st.session_state['openai_model_selection'] = st.radio("`OpenAI model`",
-                                                          ("gpt-3.5-turbo", "gpt-4"),
-                                                          index=("gpt-3.5-turbo", "gpt-4").index(st.session_state['openai_model']),
-                                                          on_change=update_model,
-                                                          key='model_selection'
-                                                          )
-                                                          
+                                                        ("gpt-3.5-turbo", "gpt-4"),
+                                                        index=("gpt-3.5-turbo", "gpt-4").index(st.session_state['openai_model']),
+                                                        on_change=update_model,
+                                                        key='model_selection'
+                                                        )           
+                                                   
 st.session_state['openai_api_key'] = st.session_state['api_key_input']
 os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']   
 
