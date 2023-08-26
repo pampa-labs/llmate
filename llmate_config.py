@@ -60,7 +60,7 @@ def init_session_state():
             temperature=0, 
             verbose=True, 
             model=initial_variables['openai_model'],
-            openai_api_key=initial_variables['openai_api_key'])
+            openai_api_key=st.session_state['openai_api_key'])
         initial_variables['sql_toolkit'] =  SQLDatabaseToolkit(db=initial_variables['sql_db'],
                                                             llm=initial_variables['llm']
                                                             )
