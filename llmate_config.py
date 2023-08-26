@@ -56,7 +56,11 @@ def init_session_state():
 
     if  st.session_state.get('openai_api_key'):
         # -------------------------------From Customize Database------------------------------
-        initial_variables['llm'] = ChatOpenAI(temperature=0, verbose=True, model=initial_variables['openai_model'])
+        initial_variables['llm'] = ChatOpenAI(
+            temperature=0, 
+            verbose=True, 
+            model=initial_variables['openai_model'],
+            openai_api_key=initial_variables['openai_api_key'])
         initial_variables['sql_toolkit'] =  SQLDatabaseToolkit(db=initial_variables['sql_db'],
                                                             llm=initial_variables['llm']
                                                             )
@@ -69,8 +73,7 @@ def init_session_state():
                                                         )
         
     else:
-        st.session_state['openai_api_key'] = ''
-        os.environ['OPENAI_API_KEY'] = ''
+        initial_variables['openai_api_key'] = ''
         
     for variable in initial_variables:
         if variable not in st.session_state:

@@ -14,7 +14,11 @@ llmate_config.init_session_state()
 
 def update_model():
     st.session_state['openai_model'] = st.session_state['model_selection']
-    st.session_state['llm'] = ChatOpenAI(temperature=0, verbose=True, model=st.session_state['openai_model'])
+    st.session_state['llm'] = ChatOpenAI(
+            temperature=0, 
+            verbose=True, 
+            model=st.session_state['openai_model'],
+            openai_api_key=st.session_state['openai_api_key'])
     
     st.toast(f"Updated model to {st.session_state['model_selection']}")
     
@@ -37,7 +41,7 @@ st.markdown(
 
 c1, c2 = st.columns([2,1])
 with c1:
-    st.session_state['api_key_input'] = st.text_input("`OPENAI_API_KEY`",
+    st.session_state['api_key_input'] = st.text_input("`OpenAI Api Key`",
                                                     type='password',
                                                     value=st.session_state['openai_api_key'])
 with c2:
@@ -49,7 +53,6 @@ with c2:
                                                         )           
                                                    
 st.session_state['openai_api_key'] = st.session_state['api_key_input']
-os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']   
 
 
 if  st.session_state['openai_api_key']:
