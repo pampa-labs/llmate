@@ -35,9 +35,6 @@ st.markdown(
 """
 )
 
-if  not st.session_state.get('openai_api_key'):
-    st.session_state['openai_api_key'] = ''
-
 c1, c2 = st.columns([2,1])
 with c1:
     st.session_state['api_key_input'] = st.text_input("`OPENAI_API_KEY`",

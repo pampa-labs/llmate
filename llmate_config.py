@@ -68,6 +68,10 @@ def init_session_state():
                                                         suffix=initial_variables['sql_agent_suffix']
                                                         )
         
+    else:
+        st.session_state['openai_api_key'] = ''
+        os.environ['OPENAI_API_KEY'] = ''
+        
     for variable in initial_variables:
         if variable not in st.session_state:
             st.session_state[variable] = initial_variables[variable]
