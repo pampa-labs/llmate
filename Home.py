@@ -50,8 +50,8 @@ with c2:
                                                           key='model_selection'
                                                           )
                                                           
-st.session_state['openai_api_key'] = copy.deepcopy(st.session_state['api_key_input'])
-# os.environ['OPENAI_API_KEY'] = copy.deepcopy(st.session_state['openai_api_key'])
+st.session_state['openai_api_key'] = st.session_state['api_key_input']
+os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']
 
 
 if  st.session_state['openai_api_key'] != '':
