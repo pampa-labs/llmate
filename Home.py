@@ -3,6 +3,7 @@ import os
 import tempfile
 
 import streamlit as st
+from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.utilities import SQLDatabase
 
@@ -18,7 +19,8 @@ def update_model():
             temperature=0, 
             verbose=True, 
             model=st.session_state['openai_model'],
-            openai_api_key=st.session_state['openai_api_key'])
+            openai_api_key=st.session_state['openai_api_key']
+            )
     
     st.toast(f"Updated model to {st.session_state['model_selection']}")
     
