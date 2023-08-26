@@ -39,7 +39,7 @@ def init_session_state():
 
     initial_variables = {}
     # -------------------------------From main page------------------------------
-    initial_variables['openai_model'] = 'gpt-turbo-3.5'
+    initial_variables['openai_model'] = 'gpt-3.5-turbo'
     initial_variables['uploaded_db'] = None
     initial_variables['db_path'] = 'example/Example_Chinook.db'
     initial_variables['db_name'] = 'Example_Chinook.db'
