@@ -35,7 +35,7 @@ st.markdown(
 """
 )
 
-if  st.session_state.get('openai_api_key'):
+if  not st.session_state.get('openai_api_key'):
     st.session_state['openai_api_key'] = ''
 
 c1, c2 = st.columns([2,1])
