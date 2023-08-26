@@ -53,7 +53,7 @@ def init_session_state():
     initial_variables['sql_agent_prefix'] = SQL_PREFIX
     initial_variables['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
 
-    if initial_variables['openai_api_key'] != '':
+    if  initial_variables.get('openai_api_key'):
         # -------------------------------From Customize Database------------------------------
         initial_variables['llm'] = ChatOpenAI(temperature=0, verbose=True, model=initial_variables['openai_model'])
         initial_variables['sql_toolkit'] =  SQLDatabaseToolkit(db=initial_variables['sql_db'],
