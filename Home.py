@@ -35,7 +35,8 @@ st.markdown(
 """
 )
 
-
+if 'openai_api_key' not in st.session_state:
+    st.session_state['openai_api_key'] = ''
 
 c1, c2 = st.columns([2,1])
 with c1:
@@ -54,7 +55,7 @@ st.session_state['openai_api_key'] = st.session_state['api_key_input']
 os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']   
 
 
-if  st.session_state.get('openai_api_key'):
+if  st.session_state['openai_api_key']:
     masked_api_key = st.session_state['openai_api_key'][:3] + '******' + st.session_state['openai_api_key'][-3:]
     st.session_state['masked_api_key'] = masked_api_key
     st.success(f"Loaded OpenAI API Key: {st.session_state['masked_api_key']}")
