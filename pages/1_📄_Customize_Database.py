@@ -1,6 +1,8 @@
 import streamlit as st
 from langchain.utilities import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
+from langchain.agents import create_sql_agent
+from langchain.agents.agent_types import AgentType
 
 import llmate_config
 llmate_config.general_config()
@@ -28,6 +30,14 @@ def update_db_params():
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
                                                             llm=st.session_state['llm']
                                                             )
+        st.session_state['sql_agent'] = create_sql_agent(
+            llm = st.session_state['llm'],
+            toolkit=st.session_state['sql_toolkit'],
+            verbose=True,
+            agent_type=AgentType.OPENAI_FUNCTIONS,
+            prefix=st.session_state['sql_agent_prefix'],
+            suffix=st.session_state['sql_agent_suffix']
+        )
         
         tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
         custom_table_info = {}
@@ -57,6 +67,15 @@ def update_table_info(table_id):
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
                                                              llm=st.session_state['llm']
                                                              )
+        st.session_state['sql_agent'] = create_sql_agent(
+            llm = st.session_state['llm'],
+            toolkit=st.session_state['sql_toolkit'],
+            verbose=True,
+            agent_type=AgentType.OPENAI_FUNCTIONS,
+            prefix=st.session_state['sql_agent_prefix'],
+            suffix=st.session_state['sql_agent_suffix']
+        )
+
         st.toast(f"Updated **{st.session_state['include_tables'][table_id]}** table info", icon='✅')
 
 
