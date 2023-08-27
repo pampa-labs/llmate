@@ -30,6 +30,14 @@ if 'eval_set_name' not in st.session_state:
 # App
 # st.header("`LLMate`")
 st.subheader("Evaluate your Solution")
+st.markdown(
+"""
+If you are loading your own JSON to use as an evaluation dataset, make sure it has the **same format** as the preloaded one:
+- **'question'**: the user's question
+- **'sql_query'**: target query that the agent should generate to get the answer to the question
+- **'answer'**: ground truth against which to compare the answer arrived at by the agent
+"""
+)
 
 uploaded_eval_set = st.file_uploader("Please upload eval set (.json): ",
                                         type=['json'],
@@ -41,6 +49,11 @@ if uploaded_eval_set:
 else:
     st.info(f"Pre-Loaded Evaluation Set: Chinook.json")
 
+st.markdown(
+"""
+Here you can take a look at the evaluation set, as well as edit what has been uploaded or add new queries to be evaluated:
+"""
+)
 
 edited_data = st.data_editor(st.session_state['evaluation_set'],
                            num_rows="dynamic",

@@ -82,10 +82,16 @@ def update_table_info(table_id):
 if st.session_state['openai_api_key'] != '':
 
     st.subheader('Edit Database Information')
+    st.markdown(
+    """
+    The Agent receives the DDL statements and some example rows for each table. 
+    Here you can choose which tables to include, how many rows to show and edit the table information to be used later in the prompt. 
+    """
+    )
 
     c1, c2 = st.columns([4,1], gap='large')
     with c1:
-        selected_tables = st.multiselect("Include Tables:",
+        selected_tables = st.multiselect("Select tables to be included:",
                                         options=st.session_state['table_names'],
                                         default=st.session_state['include_tables'],
                                         on_change=update_db_params,
@@ -115,7 +121,7 @@ if st.session_state['openai_api_key'] != '':
                             args=[i],
                             label_visibility='collapsed')
                 i += 1
-        with st.expander("All tables info"):
+        with st.expander("View table info to be received by the Agent"):
             st.text(st.session_state['sql_toolkit'].get_tools()[0].db.table_info)
     else:
         st.warning("Select at least one table")
