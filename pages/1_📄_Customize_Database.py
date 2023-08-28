@@ -58,6 +58,8 @@ def update_table_info(table_id):
 
         for key in edited_info_dict.keys():
             st.session_state['custom_table_info'][key] = edited_info_dict[key]
+            print(key)
+            print(st.session_state['custom_table_info'][key])
         
         st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
                                                           include_tables=st.session_state['include_tables'], 

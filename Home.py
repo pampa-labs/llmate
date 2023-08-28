@@ -37,7 +37,7 @@ st.markdown(
     4. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
     5. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
     
-    Let's start by setting up **OpenAI API KEY** and your **Database**:
+    Let's start by setting up **OpenAI API KEY** and your **Database**. You can try the tool with the preloaded db or update your own.
 """
 )
 
