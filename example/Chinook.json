@@ -1,14 +1,14 @@
 [
-    {"question": "How many employees names start with 'A'?",
-      "sql_query": "SELECT COUNT(*) FROM Employee WHERE FirstName LIKE 'A%'",
-      "answer": "There is 1 employee whose name starts with 'A'"},
-      {"question": "How many employees are there in the database?",
-      "sql_query": "SELECT COUNT(*) FROM 'Employee'",
-      "answer": "There are 8 employees."},
-      {"question": "What is the list of cities for employees?",
-      "sql_query": "SELECT DISTINCT City from 'Employee'",
-      "answer": "Edmonton, Calgary, and Lethbridge."},
-      {"question": "What is the ablum containing the most amount of words in its name?",
-      "sql_query": "SELECT Title FROM Album ORDER BY LENGTH(Title) DESC LIMIT 1",
-      "answer": "Tchaikovsky: 1812 Festival Overture, Op.49, Capriccio Italien & Beethoven: Wellington's Victory."}  
+  {"question": "How many employees names start with 'A'?",
+  "sql_query": "SELECT COUNT(*) FROM Employee WHERE FirstName LIKE 'A%'"
+  },
+  {"question": "How many employees are there in the database?",
+  "sql_query": "SELECT COUNT(*) FROM 'Employee'"
+  },
+  {"question": "What is the list of cities for employees?",
+  "sql_query": "SELECT DISTINCT City from 'Employee'"
+  },
+  {"question": "What is the ablum containing the most amount of words in its name?",
+  "sql_query": "SELECT Title FROM Album ORDER BY LENGTH(Title) DESC LIMIT 1"
+  }  
 ]

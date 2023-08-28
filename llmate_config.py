@@ -27,10 +27,10 @@ def general_config():
     '''
     st.markdown(hide_menu, unsafe_allow_html=True)
     
-    twitters = ['https://twitter.com/fpingham', 'https://twitter.com/petrallilucas', 'https://twitter.com/manuelsoria_']
-    random.shuffle(twitters)
+    # twitters = ['https://twitter.com/fpingham', 'https://twitter.com/petrallilucas', 'https://twitter.com/manuelsoria_']
+    # random.shuffle(twitters)
     
-    footer = f"<style> footer:after {{content:'Made with 🧉 by {', '.join(twitters)}';\
+    footer = f"<style> footer:after {{content:'Made with 🧉';\
     visibility: visible; display: block; position: relative; padding: 0px; top: -20px;}}</style>"
     st.markdown(footer, unsafe_allow_html=True)
 

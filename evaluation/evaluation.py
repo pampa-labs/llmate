@@ -71,7 +71,8 @@ def run_evaluation(agent, eval_set, db):
 
         target, target_toks = get_target(data["question"], data["sql_query"], db)
 
-        predictions.append({"question": data["question"], "answer": target, "result": answer})
+        predictions.append({"question": data["question"], "result": answer})
+        data['answer'] = target
         eval_dataset.append(data)
         end_time = time.time()
         elapsed_time = end_time - start_time

@@ -35,8 +35,7 @@ if st.session_state['openai_api_key'] != '':
     """
     If you are loading your own JSON to use as an evaluation dataset, make sure it has the **same format** as the preloaded one:
     - **'question'**: the user's question
-    - **'sql_query'**: target query that the agent should generate to get the answer to the question
-    - **'answer'**: ground truth against which to compare the answer arrived at by the agent
+    - **'sql_query'**: target query that the agent should generate to get the answer to the question 
     """
     )
 
