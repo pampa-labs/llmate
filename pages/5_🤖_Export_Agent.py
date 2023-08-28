@@ -47,7 +47,6 @@ sql_db = SQLDatabase.from_uri(database_uri,'''
 
 
     code += f'''
-                            sample_rows_in_table_info={st.session_state['sample_rows_in_table_info']},
                             custom_table_info=custom_table_info
                             )
 
