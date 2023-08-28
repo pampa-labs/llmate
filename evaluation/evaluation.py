@@ -9,13 +9,6 @@ from langchain.evaluation.qa import QAEvalChain
 
 from evaluation.prompts import GRADING_PROMPT, TARGET_PROMPT
 
-if "summary_df" not in st.session_state:
-    summary = pd.DataFrame(columns=['model',
-                                    'Latency',
-                                    'Answer Grade'])
-    st.session_state.summary_df = summary
-else:
-    summary = st.session_state.summary_df
 
 def grade_answer(eval_dataset: List, predictions: List) -> List:
 

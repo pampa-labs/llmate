@@ -10,16 +10,16 @@ llmate_config.general_config()
 llmate_config.init_session_state()
 
 # Keep dataframe in memory to accumulate experimental results
-if "existing_df" not in st.session_state:
+if "summary_df" not in st.session_state:
     summary = pd.DataFrame(columns=[
         'Answer Grade',
-        'Latency',
-        'Tokens'
+        'Avg Latency',
+        'Avg Tokens'
         ])
-    st.session_state.existing_df = summary
+    st.session_state.summary_df = summary
     print(summary)
 else:
-    summary = st.session_state.existing_df
+    summary = st.session_state.summary_df
 
 if 'evaluation_set' not in st.session_state:
     with open('example/Chinook.json', 'r') as file:
@@ -107,12 +107,12 @@ if st.button("Evaluate Agent"):
     new_row = pd.DataFrame({
         'model': [st.session_state['openai_model']],
         'Answer Grade': [percentage_answer],
-        'Latency': [mean_latency],
-        'Tokens': [mean_tokens],
+        'Avg Latency': [mean_latency],
+        'Avg Tokens': [mean_tokens],
                             })
     summary = pd.concat([summary, new_row], ignore_index=True)
     print(summary)
 
     summary.index.name = 'Exp Number'   
     st.dataframe(data=summary, use_container_width=True)
-    st.session_state.existing_df = summary
+    st.session_state.summary_df = summary
