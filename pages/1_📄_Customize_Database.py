@@ -21,14 +21,15 @@ if 'custom_table_info' not in st.session_state:
 def update_db_params():
     if st.session_state['selected_tables']:
         st.session_state['include_tables'] = st.session_state['selected_tables']
-        st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
+        # st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
         st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
                                                           include_tables=st.session_state['include_tables'],
                                                           sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
                                                           )
         
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                            llm=st.session_state['llm']
+                                                            llm=st.session_state['llm'],
+                                                            custom_table_info=st.session_state['custom_table_info']
                                                             )
         st.session_state['sql_agent'] = create_sql_agent(
             llm = st.session_state['llm'],
@@ -39,45 +40,48 @@ def update_db_params():
             suffix=st.session_state['sql_agent_suffix']
         )
         
-        tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
-        custom_table_info = {}
+        update_table_info()
+        # tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
+        # custom_table_info = {}
 
-        for i in range(len(tables_createtable_statement)):
-            custom_table_info[st.session_state['include_tables'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
+        # for i in range(len(tables_createtable_statement)):
+        #     custom_table_info[st.session_state['include_tables'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
         
-        st.session_state['custom_table_info'] = custom_table_info
+        # st.session_state['custom_table_info'] = custom_table_info
 
-def update_table_info(table_id):
+def update_table_info(table_id=None):
 
-        edited_info_dict = {}  
+    edited_info_dict = {}  
 
-        for i, table_name in enumerate(st.session_state['include_tables']):
-            edited_info = st.session_state.get(f'table_info_editor_{i}', None)
-            if edited_info:
-                edited_info_dict[table_name] = edited_info
+    for i, table_name in enumerate(st.session_state['include_tables']):
+        edited_info = st.session_state.get(f'table_info_editor_{i}', None)
+        if edited_info:
+            edited_info_dict[table_name] = edited_info
 
-        for key in edited_info_dict.keys():
-            st.session_state['custom_table_info'][key] = edited_info_dict[key]
-            print(key)
-            print(st.session_state['custom_table_info'][key])
-        
-        st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
-                                                          include_tables=st.session_state['include_tables'], 
-                                                          sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
-                                                          custom_table_info=st.session_state['custom_table_info'])
-        
-        st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                             llm=st.session_state['llm']
-                                                             )
-        st.session_state['sql_agent'] = create_sql_agent(
-            llm = st.session_state['llm'],
-            toolkit=st.session_state['sql_toolkit'],
-            verbose=True,
-            agent_type=AgentType.OPENAI_FUNCTIONS,
-            prefix=st.session_state['sql_agent_prefix'],
-            suffix=st.session_state['sql_agent_suffix']
-        )
+    for key in edited_info_dict.keys():
+        st.session_state['custom_table_info'][key] = edited_info_dict[key]
+        print("Edited key", key)
+        print(st.session_state['custom_table_info'][key])
+    
+    st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
+                                                        include_tables=st.session_state['include_tables'], 
+                                                        sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
+                                                        custom_table_info=st.session_state['custom_table_info'])
+    
+    st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
+                                                            llm=st.session_state['llm']
+                                                            )
+    st.session_state['sql_agent'] = create_sql_agent(
+        llm = st.session_state['llm'],
+        toolkit=st.session_state['sql_toolkit'],
+        verbose=True,
+        agent_type=AgentType.OPENAI_FUNCTIONS,
+        prefix=st.session_state['sql_agent_prefix'],
+        suffix=st.session_state['sql_agent_suffix']
+    )
 
+    # update_db_params()
+    if table_id is not None:
         st.toast(f"Updated **{st.session_state['include_tables'][table_id]}** table info", icon='✅')
 
 
@@ -91,23 +95,23 @@ if st.session_state['openai_api_key'] != '':
     """
     )
 
-    c1, c2 = st.columns([4,1], gap='large')
-    with c1:
-        selected_tables = st.multiselect("Select tables to be included:",
+    # c1, c2 = st.columns([4,1], gap='large')
+    # with c1:
+    selected_tables = st.multiselect("Select tables to be included:",
                                         options=st.session_state['table_names'],
                                         default=st.session_state['include_tables'],
                                         on_change=update_db_params,
                                         key='selected_tables'
                                         )
-    with c2:
-        sample_rows = st.slider('Number of Sample Rows:',
-                                min_value=0,
-                                max_value=10,
-                                value=2,
-                                on_change=update_db_params,
-                                key='sample_rows'
-                                )
-    update_db_params()
+    # with c2:
+    #     sample_rows = st.slider('Number of Sample Rows:',
+    #                             min_value=0,
+    #                             max_value=10,
+    #                             value=2,
+    #                             on_change=update_db_params,
+    #                             key='sample_rows'
+    #                             )
+    # update_db_params()
 
 
     if st.session_state['selected_tables']:
@@ -116,7 +120,7 @@ if st.session_state['openai_api_key'] != '':
         for tab in tabs:
             with tab:
                 st.text_area("`Table info`",
-                            st.session_state['custom_table_info'][st.session_state['include_tables'][i]],
+                            value=st.session_state['custom_table_info'][st.session_state['include_tables'][i]],
                             height=500,
                             on_change=update_table_info,
                             key=f'table_info_editor_{i}',
