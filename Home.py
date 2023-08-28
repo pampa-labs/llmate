@@ -1,8 +1,11 @@
-import streamlit as st
+import copy
 import os
-from langchain.utilities import SQLDatabase
 import tempfile
+
+import streamlit as st
+from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
+from langchain.utilities import SQLDatabase
 
 import llmate_config
 
@@ -12,7 +15,12 @@ llmate_config.init_session_state()
 
 def update_model():
     st.session_state['openai_model'] = st.session_state['model_selection']
-    st.session_state['llm'] = ChatOpenAI(temperature=0, verbose=True, model=st.session_state['openai_model'])
+    st.session_state['llm'] = ChatOpenAI(
+            temperature=0, 
+            verbose=True, 
+            model=st.session_state['openai_model'],
+            openai_api_key=st.session_state['openai_api_key']
+            )
     
     st.toast(f"Updated model to {st.session_state['model_selection']}")
     
@@ -29,30 +37,27 @@ st.markdown(
     4. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
     5. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
     
-    Let's start by setting up **OpenAI API KEY** and your **Database**:
+    Let's start by setting up **OpenAI API KEY** and your **Database**. You can try the tool with the preloaded db or update your own.
 """
 )
 
-
-
 c1, c2 = st.columns([2,1])
 with c1:
-    st.session_state['api_key_input'] = st.text_input("`OPENAI_API_KEY`",
+    st.session_state['api_key_input'] = st.text_input("`OpenAI Api Key`",
                                                     type='password',
                                                     value=st.session_state['openai_api_key'])
 with c2:
     st.session_state['openai_model_selection'] = st.radio("`OpenAI model`",
-                                                          ("gpt-3.5-turbo", "gpt-4"),
-                                                          index=("gpt-3.5-turbo", "gpt-4").index(st.session_state['openai_model']),
-                                                          on_change=update_model,
-                                                          key='model_selection'
-                                                          )
-                                                          
+                                                        ("gpt-3.5-turbo", "gpt-4"),
+                                                        index=("gpt-3.5-turbo", "gpt-4").index(st.session_state['openai_model']),
+                                                        on_change=update_model,
+                                                        key='model_selection'
+                                                        )           
+                                                   
 st.session_state['openai_api_key'] = st.session_state['api_key_input']
-os.environ['OPENAI_API_KEY'] = st.session_state['openai_api_key']
 
 
-if  st.session_state['openai_api_key'] != '':
+if  st.session_state['openai_api_key']:
     masked_api_key = st.session_state['openai_api_key'][:3] + '******' + st.session_state['openai_api_key'][-3:]
     st.session_state['masked_api_key'] = masked_api_key
     st.success(f"Loaded OpenAI API Key: {st.session_state['masked_api_key']}")

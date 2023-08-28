@@ -5,25 +5,17 @@ import pandas as pd
 import streamlit as st
 from langchain import LLMChain, OpenAI
 from langchain.callbacks import get_openai_callback
-from langchain.chat_models import ChatOpenAI
 from langchain.evaluation.qa import QAEvalChain
 
 from evaluation.prompts import GRADING_PROMPT, TARGET_PROMPT
 
-if "summary_df" not in st.session_state:
-    summary = pd.DataFrame(columns=['model',
-                                    'Latency',
-                                    'Answer Grade'])
-    st.session_state.summary_df = summary
-else:
-    summary = st.session_state.summary_df
 
 def grade_answer(eval_dataset: List, predictions: List) -> List:
 
     with st.spinner(text="Grading answers..."):
 
         eval_chain = QAEvalChain.from_llm(
-            llm=ChatOpenAI(model_name="gpt-3.5-turbo"),
+            llm=st.session_state['llm'],
             prompt=GRADING_PROMPT
         )
 
@@ -41,7 +33,10 @@ def get_target(question, query, db):
 
     q_result = db.run(query)
 
-    llm = OpenAI(temperature=0)
+    llm = OpenAI(
+        openai_api_key=st.session_state["openai_api_key"]
+        )
+
     llm_chain = LLMChain(
         llm=llm,
         prompt=TARGET_PROMPT
