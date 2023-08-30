@@ -10,8 +10,13 @@ from langchain.utilities import SQLDatabase
 import llmate_config
 
 llmate_config.general_config()
-llmate_config.init_session_state()
+# llmate_config.init_session_state()
 
+if 'openai_api_key' not in st.session_state: 
+    st.session_state['openai_api_key'] = ''
+
+if 'openai_model' not in st.session_state:
+    st.session_state['openai_model'] = 'gpt-3.5-turbo'
 
 def update_model():
     st.session_state['openai_model'] = st.session_state['model_selection']
@@ -25,6 +30,7 @@ def update_model():
     st.toast(f"Updated model to {st.session_state['model_selection']}")
     
 st.header("LLMate 🧉")
+
 
 st.markdown(
     """
@@ -63,28 +69,28 @@ if  st.session_state['openai_api_key']:
     st.success(f"Loaded OpenAI API Key: {st.session_state['masked_api_key']}")
 
 
-db = st.file_uploader("`Upload database as a .db file`",
-                        type="db",
-                        key='db_uploader',
-                        )
+# db = st.file_uploader("`Upload database as a .db file`",
+#                         type="db",
+#                         key='db_uploader',
+#                         )
 
-if db is not None:
-    st.session_state['uploaded_db'] = db
-    st.session_state['db_name'] = st.session_state['uploaded_db'].name
-    tfile = tempfile.NamedTemporaryFile(delete=False) 
-    tfile.write(st.session_state['uploaded_db'].read())
-    tfile.close()
-    st.session_state['db_path'] = tfile.name
-    st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'])
-    st.session_state['sample_rows_in_table_info'] = 2
-    st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
-    st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
+# if db is not None:
+#     st.session_state['uploaded_db'] = db
+#     st.session_state['db_name'] = st.session_state['uploaded_db'].name
+#     tfile = tempfile.NamedTemporaryFile(delete=False) 
+#     tfile.write(st.session_state['uploaded_db'].read())
+#     tfile.close()
+#     st.session_state['db_path'] = tfile.name
+#     st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'])
+#     st.session_state['sample_rows_in_table_info'] = 2
+#     st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
+#     st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
 
 
-if st.session_state['uploaded_db'] is not None:
-    st.success(f"Loaded Database: {st.session_state['db_name']}")
-else:
-    st.info(f"Pre-Loaded Database: {st.session_state['db_name']}")
+# if st.session_state['uploaded_db'] is not None:
+#     st.success(f"Loaded Database: {st.session_state['db_name']}")
+# else:
+#     st.info(f"Pre-Loaded Database: {st.session_state['db_name']}")
 
 
 

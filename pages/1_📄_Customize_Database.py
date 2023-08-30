@@ -3,11 +3,20 @@ from langchain.utilities import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_types import AgentType
-
+from langchain.chat_models import ChatOpenAI
+from langchain.agents.agent_toolkits.sql.prompt import SQL_FUNCTIONS_SUFFIX, SQL_PREFIX
 import llmate_config
 llmate_config.general_config()
-llmate_config.init_session_state()
 
+
+if 'sample_rows_in_table_info' not in st.session_state:
+    st.session_state['sample_rows_in_table_info'] = 2
+
+if 'sql_agent_prefix' not in st.session_state:
+    st.session_state['sql_agent_prefix'] = SQL_PREFIX
+
+if 'sql_agent_suffix' not in st.session_state:
+    st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
 
 if 'custom_table_info' not in st.session_state:
         tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
@@ -17,12 +26,32 @@ if 'custom_table_info' not in st.session_state:
             custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
         st.session_state['custom_table_info'] = custom_table_info
 
+if  'llm' not in st.session_state:
+    st.session_state['llm'] = ChatOpenAI(
+        temperature=0, 
+        verbose=True, 
+        model=st.session_state['openai_model'],
+        openai_api_key=st.session_state['openai_api_key'])
+    
+if 'sql_toolkit' not in st.session_state:
+    st.session_state['sql_toolkit'] =  SQLDatabaseToolkit(
+        db= st.session_state['sql_db'],
+        llm=st.session_state['llm'])
+    
+if 'sql_agent' not in st.session_state:   
+        st.session_state['sql_agent'] = create_sql_agent(llm = st.session_state['llm'],
+                                                        toolkit=st.session_state['sql_toolkit'],
+                                                        verbose=True,
+                                                        agent_type=AgentType.OPENAI_FUNCTIONS,
+                                                        prefix=st.session_state['sql_agent_prefix'],
+                                                        suffix=st.session_state['sql_agent_suffix']
+                                                        )
 
 def update_db_params():
     if st.session_state['selected_tables']:
         st.session_state['include_tables'] = st.session_state['selected_tables']
         # st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
-        st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
+        st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
                                                           include_tables=st.session_state['include_tables'],
                                                           sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
                                                           )
@@ -63,7 +92,7 @@ def update_table_info(table_id=None):
         print("Edited key", key)
         print(st.session_state['custom_table_info'][key])
     
-    st.session_state['sql_db'] = SQLDatabase.from_uri("sqlite:///" + st.session_state['db_path'],
+    st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
                                                         include_tables=st.session_state['include_tables'], 
                                                         sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
                                                         custom_table_info=st.session_state['custom_table_info'])
