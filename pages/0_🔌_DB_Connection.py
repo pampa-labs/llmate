@@ -1,6 +1,6 @@
 import streamlit as st
 from langchain import OpenAI, SQLDatabase
-from langchain_experimental.sql import SQLDatabaseChain
+# from langchain_experimental.sql import SQLDatabaseChain
 from streamlit_extras.grid import grid
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents import create_sql_agent
