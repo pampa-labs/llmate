@@ -1,12 +1,7 @@
-import copy
-import os
-import tempfile
-
 import streamlit as st
 from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.utilities import SQLDatabase
-
 import llmate_config
 
 llmate_config.general_config()
@@ -31,17 +26,17 @@ def update_model():
     
 st.header("LLMate 🧉")
 
-
 st.markdown(
     """
     This application is designed for customizing and evaluating an LLM-to-SQL solution. 
     It consists of the following main modules: 
 
-    1. 📄 **Customize Database** - which allows you to select which tables to use and change the descriptions.  
-    2. 👤 **Customize Agent** - which allows you to customize your LLM agent according to your needs.  
-    3. ✅ **Test Agent** - which allows you to actually test the agent running queries on your DB.  
-    4. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
-    5. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
+    1. 🔌 **Connect DB** - which allows you to select a dialect and connect to your own db
+    2. 📄 **Customize Database** - which allows you to select which tables to use and change the descriptions.  
+    3. 👤 **Customize Agent** - which allows you to customize your LLM agent according to your needs.  
+    4. ✅ **Test Agent** - which allows you to actually test the agent running queries on your DB.  
+    5. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
+    6. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
     
     Let's start by setting up **OpenAI API KEY** and your **Database**. You can try the tool with the preloaded db or update your own.
 """
