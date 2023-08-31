@@ -52,6 +52,7 @@ def run_evaluation(agent, eval_set, db):
 
     st.info("`Running agent on all examples...`")
     predictions = []
+    targets = []
     eval_dataset = []
     latencies = []
     answer_toks_ls = []
@@ -70,7 +71,8 @@ def run_evaluation(agent, eval_set, db):
             answer_toks = cb.total_tokens
 
         target, target_toks = get_target(data["question"], data["sql_query"], db)
-
+        
+        targets.append(target)
         predictions.append({"question": data["question"], "result": answer})
         data['answer'] = target
         eval_dataset.append(data)
@@ -81,4 +83,4 @@ def run_evaluation(agent, eval_set, db):
         target_toks_ls.append(target_toks)
 
     answers_grade, grade_toks_ls = grade_answer(eval_dataset, predictions)
-    return answers_grade, latencies, predictions, target, answer_toks_ls, target_toks_ls, grade_toks_ls
+    return answers_grade, latencies, predictions, targets, answer_toks_ls, target_toks_ls, grade_toks_ls

@@ -69,7 +69,7 @@ if st.session_state['openai_api_key'] != '':
             sql_agent = st.session_state['sql_agent']
 
             # Grade model
-            graded_answers, latency, predictions, target, answer_toks, target_toks, grade_toks = run_evaluation(
+            graded_answers, latency, predictions, targets, answer_toks, target_toks, grade_toks = run_evaluation(
                 sql_agent, 
                 eval_set, 
                 db
@@ -77,7 +77,7 @@ if st.session_state['openai_api_key'] != '':
 
             # Assemble outputs
             d = pd.DataFrame(predictions)
-            d['expected_answer'] = target
+            d['expected_answer'] = targets
             d['answer score'] = [g['results'] for g in graded_answers]
             d['latency'] = latency
             d['tokens'] = answer_toks
