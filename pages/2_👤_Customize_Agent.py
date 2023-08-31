@@ -21,7 +21,7 @@ def save_agent():
     )
     st.toast("Agent saved 🔥")
 
-if st.session_state['openai_api_key'] != '':
+if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
     st.subheader("Customize the Agent Prompt")
     st.write("`Prefix:`")
     new_prompt = st.text_area("`Prefix:`",

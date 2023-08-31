@@ -5,7 +5,7 @@ from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX, SQL_FUNCTIONS
 import llmate_config
 llmate_config.general_config()
 
-if st.session_state['openai_api_key'] != '':
+if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
 
     st.info("To recreate this Agent in your solution, copy and paste the code below:")
 
