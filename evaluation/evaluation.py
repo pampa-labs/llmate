@@ -81,4 +81,4 @@ def run_evaluation(agent, eval_set, db):
         target_toks_ls.append(target_toks)
 
     answers_grade, grade_toks_ls = grade_answer(eval_dataset, predictions)
-    return answers_grade, latencies, predictions, answer_toks_ls, target_toks_ls, grade_toks_ls
+    return answers_grade, latencies, predictions, target, answer_toks_ls, target_toks_ls, grade_toks_ls
