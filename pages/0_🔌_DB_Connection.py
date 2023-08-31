@@ -5,6 +5,9 @@ from streamlit_extras.grid import grid
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_types import AgentType
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 
 import llmate_config
