@@ -57,7 +57,7 @@ with col2:
 
         if st.session_state.dialect == 'mysql':
             try: 
-                st.session_state['db_uri'] = f"{st.session_state.dialect}://{st.session_state.username}:{st.session_state.password}@{st.session_state.host}:{st.session_state.port}/{st.session_state.database_name}"
+                st.session_state['db_uri'] = f"{st.session_state.dialect}+pymysql://{st.session_state.username}:{st.session_state.password}@{st.session_state.host}:{st.session_state.port}/{st.session_state.database_name}"
                 st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
                 st.session_state['db_conn'] = st.session_state.database_name
                 st.success(f"Connected to {st.session_state['db_conn']}")
