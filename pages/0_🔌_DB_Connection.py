@@ -56,7 +56,7 @@ with col2:
                 st.session_state['db_conn'] = st.session_state.database_name
 
             st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
-            st.success('Connected')
+            st.success(f"Connected to {st.session_state['db_conn']}")
 
         except:
 
@@ -65,5 +65,4 @@ with col2:
 with col3:
     st.write(' ')
 
-if 'db_conn' in st.session_state:
-    st.success(f"Connected to {st.session_state['db_conn']}")
+
