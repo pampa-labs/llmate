@@ -41,7 +41,6 @@ if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != '
                 suffix=st.session_state['sql_agent_suffix']
             )
             
-            # update_table_info()
             tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
             custom_table_info = {}
 

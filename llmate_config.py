@@ -57,15 +57,22 @@ def init_session_state():
     if 'sql_db' not in st.session_state: 
         st.session_state['sql_db'] = ''
 
-    # ------------------------------- From DB Connection --------------------
-    # initial_variables['username'] = None
-    # initial_variables['password'] = None
-    # initial_variables['host'] = None
-    # initial_variables['port'] = None
-    # initial_variables['database_name'] = None
-    # initial_variables['dialect'] = None
-    # initial_variables['database_path'] = None
-    # initial_variables['db_uri'] = ''
+    if 'sql_agent_prefix' not in st.session_state:
+        st.session_state['sql_agent_prefix'] = SQL_PREFIX
+
+    if 'sql_agent_suffix' not in st.session_state:
+        st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+
+    if st.session_state['openai_api_key'] != '':
+
+        if 'llm' not in st.session_state:
+            st.session_state['llm'] = ChatOpenAI(
+                    temperature=0, 
+                    verbose=True, 
+                    model=st.session_state['openai_model'],
+                    openai_api_key=st.session_state['openai_api_key'])
+
+
 
     # -------------------------------From Customize Database------------------------------
     if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
@@ -79,21 +86,12 @@ def init_session_state():
         initial_variables['sample_rows_in_table_info'] = 2
 
 
-        initial_variables['sql_agent_prefix'] = SQL_PREFIX
-
-
-        initial_variables['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
-
-
-        initial_variables['llm'] = ChatOpenAI(
-            temperature=0, 
-            verbose=True, 
-            model=st.session_state['openai_model'],
-            openai_api_key=st.session_state['openai_api_key'])
+        
         
         for variable in initial_variables:
             if variable not in st.session_state:
                 st.session_state[variable] = initial_variables[variable]
+      
         
         if 'sql_toolkit' not in st.session_state:
             st.session_state['sql_toolkit'] =  SQLDatabaseToolkit(
