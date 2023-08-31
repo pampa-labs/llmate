@@ -6,7 +6,7 @@ from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX, SQL_FUNCTIONS
 
 import llmate_config
 llmate_config.general_config()
-# llmate_config.init_session_state()
+llmate_config.init_session_state()
 
 def save_agent():
     st.session_state['sql_agent_prefix'] = st.session_state['prefix_editor']
@@ -47,4 +47,4 @@ if st.session_state['openai_api_key'] != '':
               disabled=(st.session_state['sql_agent_suffix']==SQL_FUNCTIONS_SUFFIX),
               on_click=lambda: setattr(st.session_state, 'sql_agent_suffix', SQL_FUNCTIONS_SUFFIX))
 else:
-    st.error('Please load OpenAI API KEY', icon='🚨')
+    st.error('Please load OpenAI API KEY and a database', icon='🚨')

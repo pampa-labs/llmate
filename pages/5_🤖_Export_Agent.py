@@ -86,4 +86,4 @@ agent = create_sql_agent(llm = llm,
     '''
     st.code(code, language='python')
 else:
-    st.error('Please load OpenAI API KEY', icon='🚨')
+    st.error('Please load OpenAI API KEY and a database', icon='🚨')

@@ -3,69 +3,75 @@ from langchain.utilities import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_types import AgentType
-from langchain.chat_models import ChatOpenAI
-from langchain.agents.agent_toolkits.sql.prompt import SQL_FUNCTIONS_SUFFIX, SQL_PREFIX
+
 
 import llmate_config
 llmate_config.general_config()
+llmate_config.init_session_state()
 
-if 'include_tables' not in st.session_state:
-    st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
+if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
 
-if 'table_names' not in st.session_state:   
-    st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
+    if 'custom_table_info' not in st.session_state:
+            tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
+            custom_table_info = {}
 
-if 'sample_rows_in_table_info' not in st.session_state:
-    st.session_state['sample_rows_in_table_info'] = 2
+            for i in range(len(tables_createtable_statement)):
+                custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
+            st.session_state['custom_table_info'] = custom_table_info
 
-if 'sql_agent_prefix' not in st.session_state:
-    st.session_state['sql_agent_prefix'] = SQL_PREFIX
+    def update_db_params():
+        if st.session_state['selected_tables']:
+            st.session_state['include_tables'] = st.session_state['selected_tables']
+            # st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
+            st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
+                                                            include_tables=st.session_state['include_tables'],
+                                                            sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
+                                                            )
+            
+            st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
+                                                                llm=st.session_state['llm'],
+                                                                custom_table_info=st.session_state['custom_table_info']
+                                                                )
+            st.session_state['sql_agent'] = create_sql_agent(
+                llm = st.session_state['llm'],
+                toolkit=st.session_state['sql_toolkit'],
+                verbose=True,
+                agent_type=AgentType.OPENAI_FUNCTIONS,
+                prefix=st.session_state['sql_agent_prefix'],
+                suffix=st.session_state['sql_agent_suffix']
+            )
+            
+            # update_table_info()
+            tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
+            custom_table_info = {}
 
-if 'sql_agent_suffix' not in st.session_state:
-    st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+            for i in range(len(tables_createtable_statement)):
+                custom_table_info[st.session_state['include_tables'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
+            
+            st.session_state['custom_table_info'] = custom_table_info
 
-if 'custom_table_info' not in st.session_state:
-        tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
-        custom_table_info = {}
+    def update_table_info(table_id=None):
 
-        for i in range(len(tables_createtable_statement)):
-            custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
-        st.session_state['custom_table_info'] = custom_table_info
+        edited_info_dict = {}  
 
-if  'llm' not in st.session_state:
-    st.session_state['llm'] = ChatOpenAI(
-        temperature=0, 
-        verbose=True, 
-        model=st.session_state['openai_model'],
-        openai_api_key=st.session_state['openai_api_key'])
-    
-if 'sql_toolkit' not in st.session_state:
-    st.session_state['sql_toolkit'] =  SQLDatabaseToolkit(
-        db= st.session_state['sql_db'],
-        llm=st.session_state['llm'])
-    
-if 'sql_agent' not in st.session_state:   
-        st.session_state['sql_agent'] = create_sql_agent(llm = st.session_state['llm'],
-                                                        toolkit=st.session_state['sql_toolkit'],
-                                                        verbose=True,
-                                                        agent_type=AgentType.OPENAI_FUNCTIONS,
-                                                        prefix=st.session_state['sql_agent_prefix'],
-                                                        suffix=st.session_state['sql_agent_suffix']
-                                                        )
+        for i, table_name in enumerate(st.session_state['include_tables']):
+            edited_info = st.session_state.get(f'table_info_editor_{i}', None)
+            if edited_info:
+                edited_info_dict[table_name] = edited_info
 
-def update_db_params():
-    if st.session_state['selected_tables']:
-        st.session_state['include_tables'] = st.session_state['selected_tables']
-        # st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
+        for key in edited_info_dict.keys():
+            st.session_state['custom_table_info'][key] = edited_info_dict[key]
+            print("Edited key", key)
+            print(st.session_state['custom_table_info'][key])
+        
         st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
-                                                          include_tables=st.session_state['include_tables'],
-                                                          sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
-                                                          )
+                                                            include_tables=st.session_state['include_tables'], 
+                                                            sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
+                                                            custom_table_info=st.session_state['custom_table_info'])
         
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                            llm=st.session_state['llm'],
-                                                            custom_table_info=st.session_state['custom_table_info']
-                                                            )
+                                                                llm=st.session_state['llm']
+                                                                )
         st.session_state['sql_agent'] = create_sql_agent(
             llm = st.session_state['llm'],
             toolkit=st.session_state['sql_toolkit'],
@@ -74,53 +80,11 @@ def update_db_params():
             prefix=st.session_state['sql_agent_prefix'],
             suffix=st.session_state['sql_agent_suffix']
         )
-        
-        # update_table_info()
-        tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
-        custom_table_info = {}
 
-        for i in range(len(tables_createtable_statement)):
-            custom_table_info[st.session_state['include_tables'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
-        
-        st.session_state['custom_table_info'] = custom_table_info
+        # update_db_params()
+        if table_id is not None:
+            st.toast(f"Updated **{st.session_state['include_tables'][table_id]}** table info", icon='✅')
 
-def update_table_info(table_id=None):
-
-    edited_info_dict = {}  
-
-    for i, table_name in enumerate(st.session_state['include_tables']):
-        edited_info = st.session_state.get(f'table_info_editor_{i}', None)
-        if edited_info:
-            edited_info_dict[table_name] = edited_info
-
-    for key in edited_info_dict.keys():
-        st.session_state['custom_table_info'][key] = edited_info_dict[key]
-        print("Edited key", key)
-        print(st.session_state['custom_table_info'][key])
-    
-    st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
-                                                        include_tables=st.session_state['include_tables'], 
-                                                        sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
-                                                        custom_table_info=st.session_state['custom_table_info'])
-    
-    st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                            llm=st.session_state['llm']
-                                                            )
-    st.session_state['sql_agent'] = create_sql_agent(
-        llm = st.session_state['llm'],
-        toolkit=st.session_state['sql_toolkit'],
-        verbose=True,
-        agent_type=AgentType.OPENAI_FUNCTIONS,
-        prefix=st.session_state['sql_agent_prefix'],
-        suffix=st.session_state['sql_agent_suffix']
-    )
-
-    # update_db_params()
-    if table_id is not None:
-        st.toast(f"Updated **{st.session_state['include_tables'][table_id]}** table info", icon='✅')
-
-
-if st.session_state['openai_api_key'] != '':
 
     st.subheader('Edit Database Information')
     st.markdown(
@@ -167,5 +131,5 @@ if st.session_state['openai_api_key'] != '':
     else:
         st.warning("Select at least one table")
 else:
-    st.error('Please load OpenAI API KEY', icon='🚨')
+    st.error('Please load OpenAI API KEY and a database', icon='🚨')
 

@@ -5,13 +5,13 @@ from langchain.utilities import SQLDatabase
 import llmate_config
 
 llmate_config.general_config()
-# llmate_config.init_session_state()
+llmate_config.init_session_state()
 
-if 'openai_api_key' not in st.session_state: 
-    st.session_state['openai_api_key'] = ''
+# if 'openai_api_key' not in st.session_state: 
+#     st.session_state['openai_api_key'] = ''
 
-if 'openai_model' not in st.session_state:
-    st.session_state['openai_model'] = 'gpt-3.5-turbo'
+# if 'openai_model' not in st.session_state:
+#     st.session_state['openai_model'] = 'gpt-3.5-turbo'
 
 def update_model():
     st.session_state['openai_model'] = st.session_state['model_selection']

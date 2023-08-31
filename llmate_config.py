@@ -12,9 +12,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.utilities import SQLDatabase
 
 
-
-
-
 def general_config():
     st.set_page_config(
         page_title="LLMate",
@@ -42,48 +39,75 @@ def init_session_state():
 
     initial_variables = {}
     # -------------------------------From Home ------------------------------
+    # initial_variables['openai_api_key'] = ''
     # initial_variables['openai_model'] = 'gpt-3.5-turbo'
     # initial_variables['uploaded_db'] = None
     # initial_variables['db_path'] = 'example/Example_Chinook.db'
     # initial_variables['db_name'] = 'Example_Chinook.db'
 
-    # ------------------------------- From DB Connection --------------------
+    if 'openai_api_key' not in st.session_state: 
+        st.session_state['openai_api_key'] = ''
 
-    # initial_variables['db_uri'] = None
-    # initial_variables['sql_db'] = None
-    # initial_variables['db_conn'] = None
+    if 'openai_model' not in st.session_state:
+        st.session_state['openai_model'] = 'gpt-3.5-turbo'
+
+    if 'db_uri'not in st.session_state: 
+        st.session_state['db_uri'] = ''
+
+    if 'sql_db' not in st.session_state: 
+        st.session_state['sql_db'] = ''
+
+    # ------------------------------- From DB Connection --------------------
+    # initial_variables['username'] = None
+    # initial_variables['password'] = None
+    # initial_variables['host'] = None
+    # initial_variables['port'] = None
+    # initial_variables['database_name'] = None
+    # initial_variables['dialect'] = None
+    # initial_variables['database_path'] = None
+    # initial_variables['db_uri'] = ''
 
     # -------------------------------From Customize Database------------------------------
-    # initial_variables['sql_db'] = SQLDatabase.from_uri("sqlite:///" + initial_variables['db_path'])
-    # initial_variables['sample_rows_in_table_info'] = 2
-    # initial_variables['include_tables'] = initial_variables['sql_db'].get_table_names()
-    # initial_variables['table_names'] = initial_variables['sql_db'].get_table_names()
+    if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
 
-    #-------------------------------From Customize Agent------------------------------
-    # initial_variables['sql_agent_prefix'] = SQL_PREFIX
-    # initial_variables['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+        initial_variables['include_tables'] = st.session_state['sql_db'].get_table_names()
 
-    # if  st.session_state.get('openai_api_key'):
-    #     # -------------------------------From Customize Database------------------------------
-    #     initial_variables['llm'] = ChatOpenAI(
-    #         temperature=0, 
-    #         verbose=True, 
-    #         model=initial_variables['openai_model'],
-    #         openai_api_key=st.session_state['openai_api_key'])
-    #     initial_variables['sql_toolkit'] =  SQLDatabaseToolkit(db=initial_variables['sql_db'],
-    #                                                         llm=initial_variables['llm']
-    #                                                         )
-    #     initial_variables['sql_agent'] = create_sql_agent(llm = initial_variables['llm'],
-    #                                                     toolkit=initial_variables['sql_toolkit'],
-    #                                                     verbose=True,
-    #                                                     agent_type=AgentType.OPENAI_FUNCTIONS,
-    #                                                     prefix=initial_variables['sql_agent_prefix'],
-    #                                                     suffix=initial_variables['sql_agent_suffix']
-    #                                                     )
+    
+        initial_variables['table_names'] = st.session_state['sql_db'].get_table_names()
+
+
+        initial_variables['sample_rows_in_table_info'] = 2
+
+
+        initial_variables['sql_agent_prefix'] = SQL_PREFIX
+
+
+        initial_variables['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+
+
+        initial_variables['llm'] = ChatOpenAI(
+            temperature=0, 
+            verbose=True, 
+            model=st.session_state['openai_model'],
+            openai_api_key=st.session_state['openai_api_key'])
         
-    # else:
-    #     initial_variables['openai_api_key'] = ''
+        for variable in initial_variables:
+            if variable not in st.session_state:
+                st.session_state[variable] = initial_variables[variable]
         
-    # for variable in initial_variables:
-    #     if variable not in st.session_state:
-    #         st.session_state[variable] = initial_variables[variable]
+        if 'sql_toolkit' not in st.session_state:
+            st.session_state['sql_toolkit'] =  SQLDatabaseToolkit(
+                db= st.session_state['sql_db'],
+                llm=st.session_state['llm'])
+        
+        if 'sql_agent' not in st.session_state:
+            st.session_state['sql_agent'] = create_sql_agent(llm = st.session_state['llm'],
+                                                                toolkit=st.session_state['sql_toolkit'],
+                                                                verbose=True,
+                                                                agent_type=AgentType.OPENAI_FUNCTIONS,
+                                                                prefix=st.session_state['sql_agent_prefix'],
+                                                                suffix=st.session_state['sql_agent_suffix']
+                                                                )
+
+
+    

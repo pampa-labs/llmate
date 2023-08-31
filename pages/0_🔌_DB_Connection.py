@@ -6,26 +6,11 @@ from streamlit_extras.grid import grid
 import llmate_config
 
 llmate_config.general_config()
-# llmate_config.init_session_state()
+llmate_config.init_session_state()
 
-def db_connection_variables():
-    # List of session variable names
-    default_values = {
-        'username': None,
-        'password': None,
-        'host': 'localhost',
-        'port': '3306',
-        'database_name': None,
-        'dialect': None, 
-        'database_path': None
-    }
-    
-    # Initialize session variables if they are not set
-    for key, value in default_values.items():
-        if key not in st.session_state:
-            st.session_state[key] = value
+# if 'db_uri'not in st.session_state: 
+#     st.session_state['db_uri'] = ''
 
-db_connection_variables()
 
 st.header('LLMate 🧉')
 dialects = ['sqlite', 'mysql', 'postgresql', 'oracle', 'mssql']
