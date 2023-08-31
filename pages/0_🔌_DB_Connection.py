@@ -54,10 +54,8 @@ with col2:
             else:
                 st.session_state['db_uri'] = f"{st.session_state.dialect}://{st.session_state.username}:{st.session_state.password}@{st.session_state.host}:{st.session_state.port}/{st.session_state.database_name}"
                 st.session_state['db_conn'] = st.session_state.database_name
-                
+
             st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
-            st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
-            st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
             st.success('Connected')
 
         except:
