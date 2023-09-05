@@ -16,13 +16,13 @@ llmate_config.init_session_state()
 def update_agent():
     few_shots = st.session_state["few_shots"]
 
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(openai_api_key=st.session_state['openai_api_key'])
 
     few_shot_docs = [
         Document(
             page_content=example["question"],
             metadata={"sql_query": example["sql_query"]},
-        )
+            )
         for example in few_shots
     ]
     vector_db = FAISS.from_documents(few_shot_docs, embeddings)
@@ -83,6 +83,7 @@ if (st.session_state["openai_api_key"] != "") & (st.session_state["db_uri"] != "
         """
         )
 
+    if 'few_shots' in st.session_state:
         edited_data = st.data_editor(
             st.session_state["few_shots"],
             num_rows="dynamic",
