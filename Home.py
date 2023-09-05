@@ -34,9 +34,10 @@ st.markdown(
     1. 🔌 **Connect DB** - which allows you to select a dialect and connect to your own db
     2. 📄 **Customize Database** - which allows you to select which tables to use and change the descriptions.  
     3. 👤 **Customize Agent** - which allows you to customize your LLM agent according to your needs.  
-    4. ✅ **Test Agent** - which allows you to actually test the agent running queries on your DB.  
-    5. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
-    6. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
+    4. 🥃 **Add Few Shots** - whick allows you to add some concrete examples to help the agent answer complex questions
+    5. ✅ **Test Agent** - which allows you to actually test the agent running queries on your DB.  
+    6. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
+    7. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
     
     Let's start by setting up **OpenAI API KEY** and your **Database**. You can try the tool with the preloaded db or update your own.
 """

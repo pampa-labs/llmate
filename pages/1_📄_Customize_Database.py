@@ -130,5 +130,5 @@ if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != '
     else:
         st.warning("Select at least one table")
 else:
-    st.error('Please load OpenAI API KEY and a database', icon='🚨')
+    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
 
