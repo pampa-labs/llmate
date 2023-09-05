@@ -1,5 +1,6 @@
 import json
 
+import llmate_config
 import streamlit as st
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_toolkits import create_retriever_tool
@@ -7,8 +8,6 @@ from langchain.agents.agent_types import AgentType
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
-
-import llmate_config
 
 llmate_config.general_config()
 llmate_config.init_session_state()
@@ -75,9 +74,8 @@ if (st.session_state["openai_api_key"] != "") & (st.session_state["db_uri"] != "
     )
 
     if uploaded_few_shots:
-        if "evaluation_set" not in st.session_state:
-            st.session_state["few_shots"] = json.loads(uploaded_few_shots.read())
-            st.session_state["few_shots.name"] = uploaded_few_shots.name
+        st.session_state["few_shots"] = json.loads(uploaded_few_shots.read())
+        st.session_state["few_shots.name"] = uploaded_few_shots.name 
 
         st.markdown(
             """

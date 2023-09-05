@@ -1,7 +1,8 @@
-import llmate_config
 import streamlit as st
-from langchain.agents.agent_toolkits.sql.prompt import SQL_FUNCTIONS_SUFFIX, SQL_PREFIX
+from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX, SQL_FUNCTIONS_SUFFIX
 
+
+import llmate_config
 llmate_config.general_config()
 
 if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
@@ -14,7 +15,6 @@ if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != '
     changing_tables = (st.session_state['include_tables'] != st.session_state['table_names'])
     changing_prefix = (st.session_state['sql_agent_prefix'] != SQL_PREFIX)
     changing_suffix = (st.session_state['sql_agent_suffix'] != SQL_FUNCTIONS_SUFFIX)
-    few_shots = ('few_shots' in st.session_state)
 
     code = f'''
 from langchain.chat_models import ChatOpenAI
@@ -22,10 +22,11 @@ from langchain.utilities import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents.agent_types import AgentType
 from langchain.agents import create_sql_agent
+
+
+llm = ChatOpenAI(temperature=0, verbose=True)
+
 '''
-
-
-    llm = ChatOpenAI(temperature=0, verbose=True)
 
     if changing_tables:
         code += f"# List containing the tables to include \ninclude_tables = {st.session_state['include_tables']}\n\n"
