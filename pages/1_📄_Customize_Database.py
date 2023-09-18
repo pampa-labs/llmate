@@ -9,8 +9,9 @@ import llmate_config
 llmate_config.general_config()
 llmate_config.init_session_state()
 
-if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
-
+if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
+    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
+else:
     if 'custom_table_info' not in st.session_state:
             tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
             custom_table_info = {}
@@ -129,6 +130,3 @@ if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != '
             st.text(st.session_state['sql_toolkit'].get_tools()[0].db.table_info)
     else:
         st.warning("Select at least one table")
-else:
-    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
-
