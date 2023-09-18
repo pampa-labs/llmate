@@ -20,7 +20,9 @@ def save_agent():
     )
     st.toast("Agent saved 🔥")
 
-if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
+if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
+    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
+else:
     st.subheader("Customize the Agent Prompt")
     st.write("`Prefix:`")
     new_prompt = st.text_area("`Prefix:`",
@@ -45,5 +47,3 @@ if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != '
     st.button("Reset to default suffix",
               disabled=(st.session_state['sql_agent_suffix']==SQL_FUNCTIONS_SUFFIX),
               on_click=lambda: setattr(st.session_state, 'sql_agent_suffix', SQL_FUNCTIONS_SUFFIX))
-else:
-    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')

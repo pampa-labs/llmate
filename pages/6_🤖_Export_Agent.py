@@ -5,7 +5,9 @@ from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX, SQL_FUNCTIONS
 import llmate_config
 llmate_config.general_config()
 
-if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
+if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
+    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
+else:
 
     st.info("To recreate this Agent in your solution, copy and paste the code below:")
 
@@ -129,5 +131,3 @@ agent = create_sql_agent(llm = llm,
                         )
     '''
     st.code(code, language='python')
-else:
-    st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
