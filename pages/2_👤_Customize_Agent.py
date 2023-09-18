@@ -6,7 +6,6 @@ from langchain.agents.agent_toolkits.sql.prompt import SQL_PREFIX, SQL_FUNCTIONS
 
 import llmate_config
 llmate_config.general_config()
-llmate_config.init_session_state()
 
 def save_agent():
     st.session_state['sql_agent_prefix'] = st.session_state['prefix_editor']

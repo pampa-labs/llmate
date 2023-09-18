@@ -7,7 +7,6 @@ import llmate_config
 from evaluation.evaluation import run_evaluation
 
 llmate_config.general_config()
-llmate_config.init_session_state()
 
 if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
     # Keep dataframe in memory to accumulate experimental results

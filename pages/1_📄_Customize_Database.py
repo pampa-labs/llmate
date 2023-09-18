@@ -7,7 +7,6 @@ from langchain.agents.agent_types import AgentType
 
 import llmate_config
 llmate_config.general_config()
-llmate_config.init_session_state()
 
 if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
     st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')

@@ -4,7 +4,6 @@ from langchain.callbacks import StreamlitCallbackHandler
 
 import llmate_config
 llmate_config.general_config()
-llmate_config.init_session_state()
 
 if (st.session_state['openai_api_key'] != '') & (st.session_state['db_uri'] != ''):
     st.subheader("Test your Agent")

@@ -10,7 +10,6 @@ from langchain.schema import Document
 from langchain.vectorstores import FAISS
 
 llmate_config.general_config()
-llmate_config.init_session_state()
 
 
 def update_agent():
