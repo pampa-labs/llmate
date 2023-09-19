@@ -12,8 +12,8 @@ st.markdown(
     """
     The **first playground** for optimizing and evaluating a **LangChain SQL Agent** in order to:
     
-    - Improve **accuracy** 🎯
-    - Reduce **cost** 💰
+    - Improve the agent capabilities in answering questions, increasing **accuracy** 🎯
+    - Reduce token consumption, therefore reducing the **cost** of your solution 💰
     
     ---
     Available modules:
