@@ -1,7 +1,7 @@
 import streamlit as st
 import llmate_config
 
-from utils import load_initial_state, load_initial_agent, update_model
+from utils import load_initial_state, load_initial_agent, update_model, update_database_selection
 
 load_initial_state()
 llmate_config.general_config()
@@ -42,7 +42,13 @@ with c2:
                                                         key='model_selection'
                                                         )           
 with c3:
-    st.session_state['database_selection'] = st.selectbox("Choose testing DB", ['Chinook','Option2'],disabled=True)
+    st.session_state['database_selection'] = st.selectbox("Choose testing DB",
+                                                          ['Chinook','Twitter'],
+                                                          index=['Chinook','Twitter'].index(st.session_state['selected_database']),
+                                                          on_change=update_database_selection,
+                                                          key='database_selectbox')
+                                                          
+                                                          
 if  st.session_state['openai_api_key']:
     masked_api_key = st.session_state['openai_api_key'][:3] + '******' + st.session_state['openai_api_key'][-3:]
     st.session_state['masked_api_key'] = masked_api_key

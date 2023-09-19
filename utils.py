@@ -15,12 +15,19 @@ def load_initial_state():
         st.session_state['openai_api_key'] = (os.environ.get('OPENAI_API_KEY') or '')
     if 'openai_model' not in st.session_state:
         st.session_state['openai_model'] = 'gpt-3.5-turbo'
+    if 'selected_database' not in st.session_state:
+        st.session_state['selected_database'] = 'Chinook'
     if 'database_options' not in st.session_state:    
         st.session_state['database_options'] = {
-            "Chinook": {
-                'db_uri': 'sqlite:///example/Chinook.db',
-                'few_shots': 'example/Chinook_few_shots.json',
-                'evaluation': 'example/Chinook_evaluation.json'
+                "Chinook": {
+                    'db_uri': 'sqlite:///example/Chinook.db',
+                    'few_shots': 'example/Chinook_few_shots.json',
+                    'evaluation': 'example/Chinook_evaluation.json'
+                },
+                "Twitter": {
+                    'db_uri': 'sqlite:///example/Twitter.sqlite',
+                    'few_shots': 'example/Twitter_few_shots.json',
+                    'evaluation': 'example/Twitter_evaluation.json'
                 }
                 }
 
@@ -32,7 +39,7 @@ def load_initial_agent():
                 verbose=True, 
                 model=st.session_state['openai_model'],
                 openai_api_key=st.session_state['openai_api_key'])
-        st.session_state['db_uri'] = st.session_state['database_options'][st.session_state['database_selection']]['db_uri']
+        st.session_state['db_uri'] = st.session_state['database_options'][st.session_state['selected_database']]['db_uri']
         st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
         st.session_state['sql_agent_prefix'] = SQL_PREFIX
         st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
@@ -74,3 +81,7 @@ def update_model():
             )
     
     st.toast(f"Updated model to {st.session_state['model_selection']}")
+
+def update_database_selection():
+    st.session_state['selected_database'] = st.session_state['database_selectbox']
+    load_initial_agent()
