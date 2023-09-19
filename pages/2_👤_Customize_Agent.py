@@ -18,6 +18,23 @@ if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_k
     st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')
 else:
     st.subheader("Customize the Agent Prompt")
+    st.markdown(
+        """
+        **Why customize the Agent's prompt? 🤔**
+
+        Imagine giving a student a clear, concise essay prompt versus a vague, broad one. With clear instructions, the student knows exactly what's expected and can deliver a more thoughtful, accurate response. Similarly, when you customize the Agent's prompt, you're guiding its thought process.
+
+        By personalizing the prompt, you:
+
+        1. **Direct the Conversation**: It's like pointing the Agent to the exact topic or area you want to discuss.
+        2. **Ensure Relevance**: Make sure the Agent's response aligns closely with what you're looking for.
+        3. **Optimize Performance**: Like providing a student with the right tools, a clear prompt helps the Agent give the best possible answer.
+        
+        Crafting the right prompt is an art, and a key to unlocking the Agent's potential 🗝️. It's your way of setting the stage for a meaningful interaction. So, always invest a bit of time to refine and focus your prompts!
+
+        """
+    )
+
     st.write("`Prefix:`")
     new_prompt = st.text_area("`Prefix:`",
                                 st.session_state['sql_agent_prefix'], 
