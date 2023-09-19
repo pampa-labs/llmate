@@ -10,10 +10,14 @@ st.header("LLMate 🧉")
 
 st.markdown(
     """
-    The playground for customizing and evaluating a **LangChain SQL Agent**. 
+    The **first playground** for customizing and evaluating a **LangChain SQL Agent** in order to:
+    
+    - Improve **accuracy** 🎯
+    - Reduce **cost** 💰
     
     ---
-
+    Available modules:
+    
     1. **Customize Database** - select the tables to be used and modify their descriptions 
     2. **Customize Agent** - customize your LLM agent prompt according to your needs
     3. **Add Few Shots** - provide `question-answer` examples to help the agent answer complex questions
