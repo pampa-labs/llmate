@@ -22,10 +22,9 @@ else:
     def update_db_params():
         if st.session_state['selected_tables']:
             st.session_state['include_tables'] = st.session_state['selected_tables']
-            # st.session_state['sample_rows_in_table_info'] = st.session_state['sample_rows']
             st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
                                                             include_tables=st.session_state['include_tables'],
-                                                            sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
+                                                            # sample_rows_in_table_info=st.session_state['sample_rows_in_table_info']
                                                             )
             
             st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
@@ -65,7 +64,7 @@ else:
         
         st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
                                                             include_tables=st.session_state['include_tables'], 
-                                                            sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
+                                                            # sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
                                                             custom_table_info=st.session_state['custom_table_info'])
         
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
