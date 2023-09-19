@@ -1,0 +1,20 @@
+[
+  {"question": "What are the names of different music genres?",
+  "sql_query": "SELECT Name FROM GENRE"},
+  {"question": "Which artist has the most albums?",
+  "sql_query": "SELECT T2.Name FROM ALBUM AS T1 JOIN ARTIST AS T2 ON T1.ArtistId  =  T2.ArtistId GROUP BY T2.Name ORDER BY COUNT(*) DESC LIMIT 1"},
+ {"question": "What are the names of tracks that contain the the word you in them?",
+  "sql_query": "SELECT Name FROM TRACK WHERE Name LIKE '%you%'"},
+  {"question": "Find all the customer last names that do not have invoice totals larger than 20.",
+  "sql_query": "SELECT LastName FROM CUSTOMER EXCEPT SELECT T1.LastName FROM CUSTOMER AS T1 JOIN Invoice AS T2 ON T1.CustomerId  =  T2.CustomerId WHERE T2.total  >  20"},
+ {"question": "What are the different first names for customers from Brazil who have also had an invoice?",
+  "sql_query": "SELECT DISTINCT T1.FirstName FROM CUSTOMER AS T1 JOIN INVOICE AS T2 ON T1.CustomerId  =  T2.CustomerId WHERE T1.country  =  'Brazil'"},
+ {"question": "Find the address of all customers that live in Germany and have invoice.",
+  "sql_query": "SELECT DISTINCT T1.Address FROM CUSTOMER AS T1 JOIN INVOICE AS T2 ON T1.CustomerId  =  T2.CustomerId WHERE T1.country  =  'Germany'"},
+  {"question": "What are the names and ids of artists with 3 or more albums, listed in alphabetical order?",
+  "sql_query": "SELECT T2.Name ,  T1.ArtistId FROM ALBUM AS T1 JOIN ARTIST AS T2 ON T1.ArtistId  =  T2.ArtistID GROUP BY T1.ArtistId HAVING COUNT(*)  >=  3 ORDER BY T2.Name"},
+  {"question": "What are the phone numbers for each employee?",
+  "sql_query": "SELECT Phone FROM EMPLOYEE"},
+  {"question": "What are the duration of the longest and shortest pop tracks in milliseconds?",
+  "sql_query": "SELECT max(Milliseconds) ,  min(Milliseconds) FROM GENRE AS T1 JOIN TRACK AS T2 ON T1.GenreId  =  T2.GenreId WHERE T1.Name  =  'Pop'"}
+]

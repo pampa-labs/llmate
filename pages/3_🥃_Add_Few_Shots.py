@@ -64,21 +64,25 @@ else:
     """
     )
 
-    uploaded_few_shots = st.file_uploader(
-        "Please upload a few shot dataset (.json): ",
-        type=["json"],
-        accept_multiple_files=False,
-    )
+    # uploaded_few_shots = st.file_uploader(
+    #     "Please upload a few shot dataset (.json): ",
+    #     type=["json"],
+    #     accept_multiple_files=False,
+    # )
+    if "few_shots" not in st.session_state:
+        with open("example/Chinook_few_shots.json", "r") as file:
+            st.session_state["few_shots"] = json.load(file)
 
-    if uploaded_few_shots:
-        st.session_state["few_shots"] = json.loads(uploaded_few_shots.read())
-        st.session_state["few_shots.name"] = uploaded_few_shots.name 
+    # if uploaded_few_shots:
+        # st.session_state["few_shots"] = json.loads(uploaded_few_shots.read())
+        # st.session_state["few_shots.name"] = st.session_state['few_shots'].name 
+        st.session_state["few_shots.name"] = "Example_chinook"
 
-        st.markdown(
-            """
-        Take a look at the few shot examples you would be adding, and edit them at will
+    st.markdown(
         """
-        )
+    Take a look at the few shot examples you would be adding, and edit them at will
+    """
+    )
 
     if 'few_shots' in st.session_state:
         edited_data = st.data_editor(
