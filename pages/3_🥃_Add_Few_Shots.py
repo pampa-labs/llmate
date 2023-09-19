@@ -98,4 +98,5 @@ else:
         
         if test_few_shot:
             response = st.session_state['few_shot_retriever'].get_relevant_documents(test_few_shot)
-            st.write(response)
+            resp = [{'question':doc.page_content,'query':doc.metadata['sql_query']} for doc in response]
+            st.dataframe(resp)
