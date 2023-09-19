@@ -12,6 +12,7 @@ def save_agent():
     st.session_state['sql_agent_prefix'] = st.session_state['prefix_editor']
     st.session_state['sql_agent_suffix'] = st.session_state['suffix_editor']
     update_agent()
+    st.toast("Agent saved 🔥")
 
 if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
     st.error('Please load OpenAI API KEY and connect to a database', icon='🚨')

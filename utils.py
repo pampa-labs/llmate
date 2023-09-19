@@ -56,7 +56,6 @@ def update_agent():
             suffix=st.session_state['sql_agent_suffix'],
             extra_tools=st.session_state['extra_tools']
         )
-    st.toast("Agent saved 🔥")
 def update_model():
     st.session_state['openai_model'] = st.session_state['model_selection']
     st.session_state['llm'] = ChatOpenAI(
