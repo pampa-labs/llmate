@@ -92,7 +92,8 @@ else:
             use_container_width=True,
             on_change=include_few_shots,
         )
-        include_few_shots()
+        if 'few_shot_retriever' not in st.session_state:
+            include_few_shots()
         test_few_shot = st.text_input("Test which few shots are retriever from a specific question:")
         
         if test_few_shot:
