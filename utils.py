@@ -43,7 +43,6 @@ def load_initial_agent():
     st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
     st.session_state['sql_agent_prefix'] = SQL_PREFIX
     st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
-    st.session_state['few_shot_retriever'] = None
     st.session_state['extra_tools'] = []
 
     st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
