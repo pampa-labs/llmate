@@ -33,33 +33,33 @@ def load_initial_state():
 
 
 def load_initial_agent():
-    if 'sql_agent' not in st.session_state:
-        st.session_state['llm'] = ChatOpenAI(
-                temperature=0, 
-                verbose=True, 
-                model=st.session_state['openai_model'],
-                openai_api_key=st.session_state['openai_api_key'])
-        st.session_state['db_uri'] = st.session_state['database_options'][st.session_state['selected_database']]['db_uri']
-        st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
-        st.session_state['sql_agent_prefix'] = SQL_PREFIX
-        st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
-        st.session_state['few_shot_retriever'] = None
-        st.session_state['extra_tools'] = []
+    # if 'sql_agent' not in st.session_state:
+    st.session_state['llm'] = ChatOpenAI(
+            temperature=0, 
+            verbose=True, 
+            model=st.session_state['openai_model'],
+            openai_api_key=st.session_state['openai_api_key'])
+    st.session_state['db_uri'] = st.session_state['database_options'][st.session_state['selected_database']]['db_uri']
+    st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
+    st.session_state['sql_agent_prefix'] = SQL_PREFIX
+    st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+    st.session_state['few_shot_retriever'] = None
+    st.session_state['extra_tools'] = []
 
-        st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
-        st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
-        tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
-        custom_table_info = {}
+    st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
+    st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
+    tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
+    custom_table_info = {}
 
-        for i in range(len(tables_createtable_statement)):
-            custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
-        st.session_state['custom_table_info'] = custom_table_info
+    for i in range(len(tables_createtable_statement)):
+        custom_table_info[st.session_state['table_names'][i]] = "CREATE TABLE " + tables_createtable_statement[i]
+    st.session_state['custom_table_info'] = custom_table_info
 
-        st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                            llm=st.session_state['llm'],
-                                                            custom_table_info=st.session_state['custom_table_info']
-                                                            )
-        update_agent()
+    st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
+                                                        llm=st.session_state['llm'],
+                                                        custom_table_info=st.session_state['custom_table_info']
+                                                        )
+    update_agent()
 
 def update_agent():
     st.session_state['sql_agent'] = create_sql_agent(
