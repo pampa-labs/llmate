@@ -42,7 +42,7 @@ with c2:
                                                         key='model_selection'
                                                         )           
 with c3:
-    st.session_state['database_selection'] = st.selectbox("Choose testing DB",
+    st.session_state['database_selection'] = st.selectbox("`Testing Database`",
                                                           ['Chinook','Twitter'],
                                                           index=['Chinook','Twitter'].index(st.session_state['selected_database']),
                                                           on_change=update_database_selection,
