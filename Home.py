@@ -10,27 +10,24 @@ st.header("LLMate 🧉")
 
 st.markdown(
     """
-    This application is designed for customizing and evaluating a **LangChain SQL Agent**. 
+    The playground for customizing and evaluating a **LangChain SQL Agent**. 
     
     ---
-    
-    It consists of the following main modules: 
 
-    1. 🔌 **DB Connection** - which allows you to select a database to use for evaluation
-    2. 📄 **Customize Database** - which allows you to select the tables to be used and modify their descriptions.  
-    3. 👤 **Customize Agent** - which allows you to customize your LLM agent prompt according to your needs.  
-    4. 🥃 **Add Few Shots** - whick allows you to add some concrete examples to help the agent answer complex questions
-    5. ✅ **Test Agent** - which allows you to actually test the agent running queries over the selected database.  
-    6. 📊 **Evaluate Agent** - which allows you to evaluate the performance of your LLM agent.   
-    7. 🤖 **Export Agent** - which allows you to fully recreate the Agent in your own solution.
+    1. **Customize Database** - select the tables to be used and modify their descriptions 
+    2. **Customize Agent** - customize your LLM agent prompt according to your needs
+    3. **Add Few Shots** - provide `question-answer` examples to help the agent answer complex questions
+    4. **Test Agent** - test the agent running queries over the selected database  
+    5. **Evaluate Agent** - evaluate the performance of your LLM agent 
+    6. **Export Agent** - export the agent to fully recreate it in your own solution
     
-    Let's start by setting up **OpenAI API KEY**
+    Let's start by setting up your **OpenAI API Key** and choosing your **Testing Database**
 """
 )
 
 c1, c2, c3 = st.columns([2,1,2])
 with c1:
-    st.session_state['api_key_input'] = st.text_input("`OpenAI Api Key`",
+    st.session_state['api_key_input'] = st.text_input("`OpenAI API Key`",
                                                     type='password',
                                                     value=st.session_state['openai_api_key'])
     st.session_state['openai_api_key'] = st.session_state['api_key_input']

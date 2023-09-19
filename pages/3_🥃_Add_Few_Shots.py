@@ -57,11 +57,9 @@ else:
     If your agent is having trouble answering some complex questions, giving it some concrete examples might work.
     
     In fact, adding few shot examples to your prompt has been [proven](https://arxiv.org/abs/2204.00498) to improve accuracy significantly when dealing with hard questions.
-
-    If you want to include few shot examples in your prompt, make sure it has the **following format**:
-    - **'question'**: the user's question
-    - **'sql_query'**: target query that the agent should generate to get the answer to the question 
-    """
+    
+    Few shot examples 👇
+ """
     )
 
     # uploaded_few_shots = st.file_uploader(
@@ -78,11 +76,6 @@ else:
         # st.session_state["few_shots.name"] = st.session_state['few_shots'].name 
         st.session_state["few_shots.name"] = "Example_chinook"
 
-    st.markdown(
-        """
-    Take a look at the few shot examples you would be adding, and edit them at will
-    """
-    )
 
     if 'few_shots' in st.session_state:
         edited_data = st.data_editor(
@@ -90,6 +83,7 @@ else:
             num_rows="dynamic",
             key="few_shots_editor",
             use_container_width=True,
+            height=300,
             on_change=include_few_shots,
         )
         if 'few_shot_retriever' not in st.session_state:

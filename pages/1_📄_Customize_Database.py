@@ -83,10 +83,7 @@ else:
     Well, think of it like handing in a well-prepared report instead of just scribbled notes. 
     By choosing which tables to include and editing the table information, you're essentially making the Agent's 'reading' experience smoother and more focused.
 
-    First, select the tables you want. After that, you can then dive deeper and edit their specific information. If you decide to go back and update the tables again, you'll be starting fresh. This means any detailed edits or tweaks you made to the table information will be erased 🚨. 
-    
-    *So, always be sure of your table choices before diving into the specifics*
-    
+    First, select the tables you want. After that, you can dive deeper and edit their specific information.    
     """
     )
 

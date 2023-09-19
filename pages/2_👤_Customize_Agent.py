@@ -30,7 +30,7 @@ else:
         2. **Ensure Relevance**: Make sure the Agent's response aligns closely with what you're looking for.
         3. **Optimize Performance**: Like providing a student with the right tools, a clear prompt helps the Agent give the best possible answer.
         
-        Crafting the right prompt is an art, and a key to unlocking the Agent's potential 🗝️. It's your way of setting the stage for a meaningful interaction. So, always invest a bit of time to refine and focus your prompts!
+        Crafting the right prompt is an art, and a key to unlocking the Agent's potential 🗝️. It's your way of setting the stage for a meaningful interaction. So, always invest some time to refine your prompts!
 
         """
     )
