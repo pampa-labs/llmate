@@ -28,6 +28,8 @@ def load_initial_agent():
         st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'])
         st.session_state['sql_agent_prefix'] = SQL_PREFIX
         st.session_state['sql_agent_suffix'] = SQL_FUNCTIONS_SUFFIX
+        st.session_state['few_shot_retriever'] = None
+        st.session_state['extra_tools'] = []
 
         st.session_state['include_tables'] = st.session_state['sql_db'].get_table_names()
         st.session_state['table_names'] = st.session_state['sql_db'].get_table_names()
@@ -51,7 +53,8 @@ def update_agent():
             verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             prefix=st.session_state['sql_agent_prefix'],
-            suffix=st.session_state['sql_agent_suffix']
+            suffix=st.session_state['sql_agent_suffix'],
+            extra_tools=st.session_state['extra_tools']
         )
     st.toast("Agent saved 🔥")
 def update_model():

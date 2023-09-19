@@ -9,10 +9,12 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
 
+from utils import update_agent
+
 llmate_config.general_config()
 
 
-def update_agent():
+def include_few_shots():
     few_shots = st.session_state["few_shots"]
 
     embeddings = OpenAIEmbeddings(openai_api_key=st.session_state['openai_api_key'])
@@ -26,6 +28,7 @@ def update_agent():
     ]
     vector_db = FAISS.from_documents(few_shot_docs, embeddings)
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
+    st.session_state['few_shot_retriever'] = retriever
 
     description = """
     This tool will help you understand similar examples to adapt them to the user question.
@@ -40,16 +43,9 @@ def update_agent():
         "sql_agent_suffix"
     ] = "Always use the 'sql_get_similar_examples' tool before using any other tool."
 
-    st.session_state["sql_agent"] = create_sql_agent(
-        llm=st.session_state["llm"],
-        toolkit=st.session_state["sql_toolkit"],
-        verbose=True,
-        agent_type=AgentType.OPENAI_FUNCTIONS,
-        prefix=st.session_state["sql_agent_prefix"],
-        suffix=st.session_state["sql_agent_suffix"],
-        extra_tools=[retriever_tool],
-    )
-    st.toast("Agent saved 🔥")
+    st.session_state['extra_tools'] = [retriever_tool]
+
+    update_agent()
 
 
 if ('openai_api_key' not in st.session_state) or (st.session_state['openai_api_key'] == ''):
@@ -90,5 +86,11 @@ else:
             num_rows="dynamic",
             key="few_shots_editor",
             use_container_width=True,
-            on_change=update_agent,
+            on_change=include_few_shots,
         )
+        include_few_shots()
+        test_few_shot = st.text_input("Test which few shots are retriever from a specific question:")
+        
+        if test_few_shot:
+            response = st.session_state['few_shot_retriever'].get_relevant_documents(test_few_shot)
+            st.write(response)
