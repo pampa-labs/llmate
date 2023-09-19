@@ -45,29 +45,25 @@ else:
             st.session_state['custom_table_info'] = custom_table_info
 
     def update_table_info(table_id=None):
+        # No need for edited_info_dict as we update directly in session_state
+        edited_info = st.session_state.get(f'table_info_editor_{table_id}', None)
+        if edited_info:
+            print("Info editada:", edited_info)
+            st.session_state['custom_table_info'][st.session_state['include_tables'][table_id]] = edited_info
+            print("Guardando edited key:", st.session_state['include_tables'][table_id])
+            print("Info guardada:", st.session_state['custom_table_info'][st.session_state['include_tables'][table_id]])
 
-        edited_info_dict = {}  
-
-        for i, table_name in enumerate(st.session_state['include_tables']):
-            edited_info = st.session_state.get(f'table_info_editor_{i}', None)
-            if edited_info:
-                edited_info_dict[table_name] = edited_info
-
-        for key in edited_info_dict.keys():
-            st.session_state['custom_table_info'][key] = edited_info_dict[key]
-            print("Edited key", key)
-            print(st.session_state['custom_table_info'][key])
-        
         st.session_state['sql_db'] = SQLDatabase.from_uri(st.session_state['db_uri'],
-                                                            include_tables=st.session_state['include_tables'], 
-                                                            # sample_rows_in_table_info=st.session_state['sample_rows_in_table_info'],
-                                                            custom_table_info=st.session_state['custom_table_info'])
+                                                        include_tables=st.session_state['include_tables'], 
+                                                        custom_table_info=st.session_state['custom_table_info'])
         
         st.session_state['sql_toolkit'] = SQLDatabaseToolkit(db=st.session_state['sql_db'],
-                                                                llm=st.session_state['llm']
-                                                                )
+                                                            llm=st.session_state['llm'])
+        
+        print("Info SQL Toolkit:", st.session_state['sql_toolkit'].get_tools()[0].db.table_info)
+        
         st.session_state['sql_agent'] = create_sql_agent(
-            llm = st.session_state['llm'],
+            llm=st.session_state['llm'],
             toolkit=st.session_state['sql_toolkit'],
             verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
@@ -75,7 +71,6 @@ else:
             suffix=st.session_state['sql_agent_suffix']
         )
 
-        # update_db_params()
         if table_id is not None:
             st.toast(f"Updated **{st.session_state['include_tables'][table_id]}** table info", icon='✅')
 
@@ -88,39 +83,41 @@ else:
     """
     )
 
-    # c1, c2 = st.columns([4,1], gap='large')
-    # with c1:
-    selected_tables = st.multiselect("Select tables to be included:",
-                                        options=st.session_state['table_names'],
-                                        default=st.session_state['include_tables'],
-                                        on_change=update_db_params,
-                                        key='selected_tables'
-                                        )
-    # with c2:
-    #     sample_rows = st.slider('Number of Sample Rows:',
-    #                             min_value=0,
-    #                             max_value=10,
-    #                             value=2,
-    #                             on_change=update_db_params,
-    #                             key='sample_rows'
-    #                             )
-    # update_db_params()
+    if 'checkbox_states' not in st.session_state:
+        st.session_state.checkbox_states = {table: True for table in st.session_state['table_names']}
+
+    with st.expander("1. Tables selection"):
+        selected_tables = []
+        for table in st.session_state['table_names']:
+            if st.checkbox(table, value=st.session_state.checkbox_states[table], key=table):
+                selected_tables.append(table)
+            else:
+                st.session_state.checkbox_states[table] = False
+
+        st.session_state['selected_tables'] = selected_tables
+
+        if st.button('Update tables'):
+            update_db_params()
+            st.success(f"Tables updated: {selected_tables}")
 
 
-    if st.session_state['selected_tables']:
-        tabs = st.tabs(st.session_state['include_tables'])
-        i = 0
-        for tab in tabs:
-            with tab:
-                st.text_area("`Table info`",
-                            value=st.session_state['custom_table_info'][st.session_state['include_tables'][i]],
-                            height=500,
-                            on_change=update_table_info,
-                            key=f'table_info_editor_{i}',
-                            args=[i],
-                            label_visibility='collapsed')
-                i += 1
-        with st.expander("View table info to be received by the Agent"):
-            st.text(st.session_state['sql_toolkit'].get_tools()[0].db.table_info)
-    else:
-        st.warning("Select at least one table")
+    with st.expander("2. Edit Create Statements"):
+        if st.session_state['selected_tables']:
+            tabs = st.tabs(st.session_state['include_tables'])
+            i = 0
+            for tab in tabs:
+                with tab:
+                    st.text_area("`Table info`",
+                                value=st.session_state['custom_table_info'][st.session_state['include_tables'][i]],
+                                height=500,
+                                on_change=update_table_info,
+                                key=f'table_info_editor_{i}',
+                                args=[i],
+                                label_visibility='collapsed')
+                    i += 1
+        else:
+            st.warning("Selecciona al menos una tabla en el paso anterior.")
+
+    with st.expander("View table info to be used by the Agent"):
+        current_toolkit_info = st.session_state['sql_toolkit'].get_tools()[0].db.table_info
+        st.text(current_toolkit_info)
