@@ -83,4 +83,10 @@ def update_model():
 
 def update_database_selection():
     st.session_state['selected_database'] = st.session_state['database_selectbox']
+    if 'custom_table_info' in st.session_state:
+        del st.session_state.custom_table_info
+    if 'checkbox_states' in st.session_state:
+        del st.session_state.checkbox_states
+    # if 'table_names' in st.session_state:
+    #     del st.session_state.table_names
     load_initial_agent()
