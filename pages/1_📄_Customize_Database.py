@@ -4,6 +4,8 @@ from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_types import AgentType
 
+from utils import update_agent
+
 
 import llmate_config
 llmate_config.general_config()
@@ -31,14 +33,8 @@ else:
                                                                 llm=st.session_state['llm'],
                                                                 custom_table_info=st.session_state['custom_table_info']
                                                                 )
-            st.session_state['sql_agent'] = create_sql_agent(
-                llm = st.session_state['llm'],
-                toolkit=st.session_state['sql_toolkit'],
-                verbose=True,
-                agent_type=AgentType.OPENAI_FUNCTIONS,
-                prefix=st.session_state['sql_agent_prefix'],
-                suffix=st.session_state['sql_agent_suffix']
-            )
+            
+            update_agent()
             
             tables_createtable_statement = st.session_state['sql_db'].get_table_info().split("CREATE TABLE")[1:]
             custom_table_info = {}
