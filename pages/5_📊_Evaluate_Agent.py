@@ -22,7 +22,7 @@ else:
         summary = st.session_state.summary_df
 
     if "evaluation_set" not in st.session_state:
-        with open("example/Chinook_evaluation.json", "r") as file:
+        with open(st.session_state['database_options'][st.session_state['database_selection']]['evaluation'], "r") as file:
             st.session_state["evaluation_set"] = json.load(file)
 
     if "eval_set_name" not in st.session_state:

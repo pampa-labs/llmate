@@ -70,7 +70,7 @@ else:
     #     accept_multiple_files=False,
     # )
     if "few_shots" not in st.session_state:
-        with open("example/Chinook_few_shots.json", "r") as file:
+        with open(st.session_state['database_options'][st.session_state['database_selection']]['few_shots'], "r") as file:
             st.session_state["few_shots"] = json.load(file)
 
     # if uploaded_few_shots:

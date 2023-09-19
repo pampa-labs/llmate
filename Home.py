@@ -28,7 +28,7 @@ st.markdown(
 """
 )
 
-c1, c2 = st.columns([2,1])
+c1, c2, c3 = st.columns([2,1,2])
 with c1:
     st.session_state['api_key_input'] = st.text_input("`OpenAI Api Key`",
                                                     type='password',
@@ -41,7 +41,8 @@ with c2:
                                                         on_change=update_model,
                                                         key='model_selection'
                                                         )           
-                                                   
+with c3:
+    st.session_state['database_selection'] = st.selectbox("Choose testing DB", ['Chinook','Option2'],disabled=True)
 if  st.session_state['openai_api_key']:
     masked_api_key = st.session_state['openai_api_key'][:3] + '******' + st.session_state['openai_api_key'][-3:]
     st.session_state['masked_api_key'] = masked_api_key
