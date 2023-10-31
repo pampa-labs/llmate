@@ -30,6 +30,7 @@ streamlit run Home.py
 A new window or tab should open in your default web browser, displaying the Streamlit app.
 
 Database Connection & OpenAI API Key
+
 By default, you can connect to the Chinook database. If you'd like to connect to your own database, ensure it is either SQLite or MySQL, as only these dialects are currently supported.
 
 To fully leverage the capabilities of LLMate, you'll need to provide your own OpenAI API key.
